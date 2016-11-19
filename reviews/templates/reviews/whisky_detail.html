@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Whisky detail</title>
+</head>
+<body>
+
+<h2>{{ whisky.name }}</h2>
+<h5>{{ whisky.review_set.count }} reviews ({{ whisky.average_rating | floatformat }} average rating)</h5>
+
+<h3>Recent reviews</h3>
+
+{% if whisky.review_set.all %}
+<div>
+    {%  for review in whisky.review_set.all %}
+    <div>
+        <em>{{ review.comment }}</em>
+        <h6>Rated {{ review.rating }} of 5 by {{ review.user_name }}</h6>
+        <h5><a href="{% url 'reviews:review_detail' review.id %}">
+            Read more
+        </a></h5>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+    <p>No reviews for this whisky yet.</p>
+{% endif %}
+
+</body>
+</html>

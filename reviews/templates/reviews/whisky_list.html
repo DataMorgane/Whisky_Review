@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Whisky List</title>
+</head>
+<body>
+
+<h2>Whisky list</h2>
+
+{% if whisky_list %}
+<div>
+    {% for whisky in whisky_list %}
+    <div>
+        <h4><a href="{% url 'reviews:whisky_detail' whisky.id %}">
+            {{ whisky.name }}
+        </a></h4>
+        <h5>{{ whisky.review_set.count }} reviews</h5>
+        <h5>{{ whisky.average_rating | floatformat }} average rating</h5>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+    <p>No whisky are available.</p>
+{% endif %}
+
+</body>
+</html>
