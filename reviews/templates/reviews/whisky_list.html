@@ -14,9 +14,9 @@
 
 {% block content %}
 {% if whisky_list %}
-<div>
+<div class="row">
     {% for whisky in whisky_list %}
-    <div>
+    <div class="col-xs-6 col-lg-4">
         <h4><a href="{% url 'reviews:whisky_detail' whisky.id %}">
             {{ whisky.name }}
         </a></h4>

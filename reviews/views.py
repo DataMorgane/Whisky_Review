@@ -23,7 +23,8 @@ def whisky_list(request):
 
 def whisky_detail(request, whisky_id):
     whisky = get_object_or_404(Whisky, pk=whisky_id)
-    return render(request, 'reviews/whisky_detail.html', {'whisky': whisky})
+    form = ReviewForm()
+    return render(request, 'reviews/whisky_detail.html', {'whisky': whisky, 'form': form})
 
 def add_review(request, whisky_id):
     whisky = get_object_or_404(Whisky, pk=whisky_id)
