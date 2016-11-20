@@ -8,10 +8,8 @@ class Whisky(models.Model):
     name = models.CharField(max_length=200)
 
     def average_rating(self):
-        all_ratings = []
-        for i in self.review_set.all():
-            all_ratings.append(i.rating)
-        return (sum(all_ratings) / len(all_ratings))
+        all_ratings = [i.rating for i in self.review_set.all()]
+        return np.mean(all_ratings)
 
     def __unicode__(self):
         return self.name

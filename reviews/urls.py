@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^whisky$', views.whisky_list, name='whisky_list'),
     # ex: /whisky/5/
     url(r'^whisky/(?P<whisky_id>[0-9]+)/$', views.whisky_detail, name='whisky_detail'),
+    url(r'^whisky/(?P<whisky_id>[0-9]+)/add_review/$', views.add_review, name='add_review'),
 ]
