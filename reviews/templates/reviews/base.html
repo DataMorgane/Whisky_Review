@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<title>Title</title>-->
+</head>
+<body>
+    <div>
+        <nav>
+            <div>
+                <a href="{% url 'reviews:review_list' %}">Wiskyrama</a>
+            </div>
+            <div id="navbar">
+                <ul>
+                    <li><a href="{% url 'reviews:whisky_list' %}">Whisky List</a></li>
+                    <li><a href="{% url 'reviews:review_list' %}">Home</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <h1>{% block title %}(no title){% endblock %}</h1>
+
+        {% block content %}(no content){% endblock %}
+
+    </div>
+</body>
+</html>

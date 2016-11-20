@@ -6,8 +6,13 @@
 </head>
 <body>
 
-<h2>Whisky list</h2>
+{% extends 'reviews/base.html' %}
 
+{% block title %}
+<h2>Whisky list</h2>
+{% endblock %}
+
+{% block content %}
 {% if whisky_list %}
 <div>
     {% for whisky in whisky_list %}
@@ -23,6 +28,7 @@
 {% else %}
     <p>No whisky are available.</p>
 {% endif %}
+{% endblock %}
 
 </body>
 </html>
