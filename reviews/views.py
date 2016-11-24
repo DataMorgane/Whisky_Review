@@ -5,6 +5,8 @@ from .models import Review, Whisky
 from .forms import ReviewForm
 import datetime
 
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 def review_list(request):
@@ -26,13 +28,14 @@ def whisky_detail(request, whisky_id):
     form = ReviewForm()
     return render(request, 'reviews/whisky_detail.html', {'whisky': whisky, 'form': form})
 
+@login_required
 def add_review(request, whisky_id):
     whisky = get_object_or_404(Whisky, pk=whisky_id)
     form = ReviewForm(request.POST)
     if form.is_valid():
         rating = form.cleaned_data['rating']
         comment = form.cleaned_data['comment']
-        user_name = form.cleaned_data['user_name']
+        user_name = request.user.username
         review = Review()
         review.whisky = whisky
         review.user_name = user_name
