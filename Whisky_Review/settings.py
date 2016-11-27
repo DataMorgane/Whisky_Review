@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +41,12 @@ INSTALLED_APPS = [
     'bootstrap3',
     'reviews',
 ]
+
+# Registration
+ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window
+REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
+
+SITE_ID=1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
