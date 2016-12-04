@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from .models import Review, Whisky
+from .models import Review, Whisky, Cluster
+from django.contrib.auth.models import User
 from .forms import ReviewForm
 import datetime
 
@@ -59,13 +60,35 @@ def user_review_list(request, username=None):
 
 @login_required
 def user_recommendation_list(request):
-    # Get this user reviews
+    # Get request user reviewed whiskies
     user_reviews = Review.objects.filter(user_name=request.user.username).prefetch_related('whisky')
-    # From the reviews, get a set of whisky IDs
     user_reviews_whisky_ids = set(map(lambda x: x.whisky.id, user_reviews))
-    # The get a whisky list excluding the previous IDs
-    whisky_list = Whisky.objects.exclude(id__in=user_reviews_whisky_ids)
 
-    return render(request,
-                  'reviews/user_recommendation_list.html',
-                  {'username': request.user.username, 'whisky_list':whisky_list})
+    # Get request cluster name (juste the first one right now)
+    user_cluster_name = \
+        User.objects.get(username=request.user.username).cluster_set.first().name
+
+    # Get usernames for other members of the cluster
+    user_cluster_other_members = \
+        Cluster.objects.get(name=user_cluster_name).users \
+            .exclude(username=request.user.username).all()
+    other_members_usernames = set(map(lambda x: x.username, user_cluster_other_members))
+
+    # Get reviews by those users, excluding whiskies reviewed bu the request user
+    other_users_reviews = \
+        Review.objects.filter(user_name__in=other_members_usernames) \
+            .exclude(whisky_id__in=user_reviews_whisky_ids)
+    other_users_reviews_whisky_ids = set(map(lambda x: x.whisky.id, other_users_reviews))
+
+    # Then get a whisky list including the previous IDs, order by rating
+    whisky_list = sorted(
+        list(Whisky.objects.filter(id__in=other_users_reviews_whisky_ids)),
+        key=lambda x: x.average_rating(),
+        reverse=True
+    )
+
+    return render(
+        request,
+        'reviews/user_recommendation_list.html',
+        {'username': request.user.username, 'whisky_list':whisky_list}
+    )
